@@ -24,21 +24,23 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UsuarioService service;
+    private UsuarioService usuarioService;
 
     @Autowired
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UsuarioLoginDto usuarioLoginDto){
+    public ResponseEntity login(
+            @RequestBody
+            @Valid
+            UsuarioLoginDto usuarioLoginDto
+    ){
         UsernamePasswordAuthenticationToken usernamePassword =
                 new UsernamePasswordAuthenticationToken(
                         usuarioLoginDto.email(),
-                        usuarioLoginDto.senha()
-                );
+                        usuarioLoginDto.senha());
 
         Authentication auth = authenticationManager.authenticate(usernamePassword);
-        System.out.println(String.format("========> %s", auth.toString()));
 
         String token = tokenService.gerarToken((Usuario) auth.getPrincipal());
 
@@ -47,10 +49,14 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioExibicaoDto registrar(@RequestBody @Valid UsuarioRegistroDto usuarioRegistroDto){
-        UsuarioExibicaoDto usuarioSalvo = null;
-        usuarioSalvo = service.criarUsuario(usuarioRegistroDto);
-        return usuarioSalvo;
+    public ResponseEntity register(@RequestBody @Valid UsuarioRegistroDto usuarioRegistroDto){
+
+        UsuarioExibicaoDto usuarioExibicaoDto = null;
+
+        usuarioExibicaoDto = usuarioService.criarUsuario(usuarioRegistroDto);
+
+        return ResponseEntity.ok(usuarioExibicaoDto);
+
     }
 
 }

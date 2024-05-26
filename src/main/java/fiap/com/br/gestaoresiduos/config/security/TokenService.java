@@ -30,7 +30,7 @@ public class TokenService {
                     .sign(algorithm);
 
             return token;
-        } catch (JWTCreationException e) {
+        } catch (JWTCreationException e){
             throw new RuntimeException("Não foi possível gerar o token!");
         }
 
@@ -54,7 +54,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
 
-        } catch (JWTVerificationException e) {
+        }catch (JWTVerificationException exception){
             return "";
         }
     }

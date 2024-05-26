@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "endereco")
+@Table(name = "tbl_endereco")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,7 +15,8 @@ import lombok.Setter;
 public class Endereco {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ENDERECO")
+    @SequenceGenerator(name = "SEQ_ENDERECO", sequenceName = "SEQ_ENDERECO", allocationSize = 1)
     private Long id;
     private String rua;
     private String bairro;

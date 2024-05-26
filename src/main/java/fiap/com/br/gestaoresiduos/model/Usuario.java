@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "TBL_USUARIO")
+@Table(name = "tbl_usuario")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,15 +21,11 @@ public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "SEQ_USUARIOS"
+            strategy = GenerationType.SEQUENCE, generator = "SEQ_USUARIOS"
     )
     @SequenceGenerator(
-            name = "SEQ_USUARIOS",
-            sequenceName = "SEQ_USUARIOS",
-            allocationSize = 1
+            name = "SEQ_USUARIOS", sequenceName = "SEQ_USUARIOS", allocationSize = 1
     )
-    @Column(name = "usuario_id")
     private Long id;
     private String nome;
     private String email;
@@ -38,7 +34,7 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id", referencedColumnName = "usuario_id")
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;
 
     @Override

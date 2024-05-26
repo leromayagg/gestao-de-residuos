@@ -18,39 +18,33 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+
     @Autowired
     private VerificarToken verificarToken;
 
     @Bean
     public SecurityFilterChain filtrarCadeiaDeSeguranca(
             HttpSecurity httpSecurity) throws Exception {
-
-        return httpSecurity.csrf(csrf -> csrf.disable())
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/usuarios").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/usuarios").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/usuarios").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios").hasAnyRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
+                        .requestMatchers(HttpMethod.PUT, "/user/confirm-scheduling/*")
+                        .hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 .addFilterBefore(
                         verificarToken,
-                        UsernamePasswordAuthenticationFilter.class
-                )
+                        UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
-
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-
     }
 
     @Bean

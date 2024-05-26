@@ -24,9 +24,10 @@ public class UsuarioController {
         return usuarioService.criarUsuario(usuario);
     }
 
-    @GetMapping("/usuarios")
-    @ResponseStatus(HttpStatus.OK)
-    public List<UsuarioExibicaoDto> listarTodos() {
-        return usuarioService.listarTodos();
-    }
+//    @GetMapping("/usuarios")
+//    @ResponseStatus(HttpStatus.OK)
+//    public List<UsuarioExibicaoDto> listarTodos() {
+//        String email = "aol";
+//        return usuarioService.getUsuarioEmail(email);
+//    }
 }

@@ -6,6 +6,7 @@ import fiap.com.br.gestaoresiduos.model.Usuario;
 import fiap.com.br.gestaoresiduos.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 public class UsuarioService {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -24,17 +26,20 @@ public class UsuarioService {
         BeanUtils.copyProperties(usuarioRegistroDto, usuario);
         usuario.setSenha(senhaCriptografada);
 
-        Usuario usuarioSalvo = usuarioRepository.save(usuario);
-        return new UsuarioExibicaoDto(usuarioSalvo);
+        Usuario userSaved = usuarioRepository.save(usuario);
+        return new UsuarioExibicaoDto(userSaved);
 
     }
 
-    public List<UsuarioExibicaoDto> listarTodos(){
-        return usuarioRepository
-                .findAll()
-                .stream()
-                .map(UsuarioExibicaoDto::new)
-                .toList();
+    public UsuarioExibicaoDto getUsuarioEmail(String email) {
+        UserDetails usuario = usuarioRepository.findByEmail(email);
+
+
+        if (usuario.isEnabled()) {
+            return new UsuarioExibicaoDto((Usuario) usuario);
+        } else {
+            throw new RuntimeException("Usuário não encontrado");
+        }
     }
 
 }

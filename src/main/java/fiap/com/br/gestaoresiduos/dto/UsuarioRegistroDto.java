@@ -15,7 +15,7 @@ public record UsuarioRegistroDto(
         String email,
 
         @NotBlank(message = "Preencha este campo")
-        @Size(min = 8, max = 15, message = "Deve conter entre 8 a 15 caracteres")
+        @Size(min = 8, max = 20, message = "Deve conter entre 8 a 15 caracteres")
         String senha
 ) {
 }
