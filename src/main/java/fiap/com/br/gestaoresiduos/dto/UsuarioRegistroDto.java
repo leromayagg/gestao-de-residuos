@@ -1,5 +1,6 @@
 package fiap.com.br.gestaoresiduos.dto;
 
+import fiap.com.br.gestaoresiduos.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,8 @@ public record UsuarioRegistroDto(
 
         @NotBlank(message = "Preencha este campo")
         @Size(min = 8, max = 20, message = "Deve conter entre 8 a 15 caracteres")
-        String senha
+        String senha,
+
+        Role role
 ) {
 }

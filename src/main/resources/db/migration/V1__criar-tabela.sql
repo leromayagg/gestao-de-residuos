@@ -1,18 +1,24 @@
+
 CREATE SEQUENCE SEQ_ENDERECO START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE tbl_endereco START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE SEQ_AGENDAMENTO START WITH 1 INCREMENT BY 1;
+
+
+CREATE SEQUENCE SEQ_USUARIOS
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
 
 CREATE TABLE tbl_usuario (
-                             id INTEGER DEFAULT SEQ_USUARIOS.NEXTVAL PRIMARY KEY,
+                             id INTEGER DEFAULT SEQ_USUARIOS.NEXTVAL NOT NULL,
                              nome VARCHAR2(100) NOT NULL,
-                             email VARCHAR2(100) UNIQUE NOT NULL,
-                             senha VARCHAR2(60) NOT NULL,
-                             role VARCHAR(15) DEFAULT 'USER',
-                             endereco_id INTEGER,
-                             FOREIGN KEY (endereco_id) REFERENCES tbl_address(id)
-);
+                             email VARCHAR(100)  NOT NULL,
+                             senha VARCHAR(60) NOT NULL,
+                             role VARCHAR(15) DEFAULT 'USER'
 
+);
 CREATE TABLE tbl_endereco (
-                              id INTEGER DEFAULT TBL_ADDRESS_SEQ.NEXTVAL PRIMARY KEY,
+                              id INTEGER DEFAULT SEQ_ENDERECO.NEXTVAL PRIMARY KEY,
                               rua VARCHAR(255),
                               bairro VARCHAR(255),
                               cidade VARCHAR(255),
@@ -20,3 +26,11 @@ CREATE TABLE tbl_endereco (
                               numero INTEGER,
                               cep INTEGER
 );
+CREATE TABLE tbl_agendamento (
+                              id INTEGER DEFAULT SEQ_AGENDAMENTO.NEXTVAL PRIMARY KEY,
+                              timestamp INTEGER,
+                              status VARCHAR(255)
+);
+
+ALTER TABLE tbl_usuario
+    MODIFY senha VARCHAR2(100);

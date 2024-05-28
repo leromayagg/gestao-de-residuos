@@ -2,6 +2,7 @@ package fiap.com.br.gestaoresiduos.service;
 
 import fiap.com.br.gestaoresiduos.dto.UsuarioExibicaoDto;
 import fiap.com.br.gestaoresiduos.dto.UsuarioRegistroDto;
+import fiap.com.br.gestaoresiduos.exception.UsuarioNaoEncontradoException;
 import fiap.com.br.gestaoresiduos.model.Usuario;
 import fiap.com.br.gestaoresiduos.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -31,14 +33,44 @@ public class UsuarioService {
 
     }
 
-    public UsuarioExibicaoDto getUsuarioEmail(String email) {
-        UserDetails usuario = usuarioRepository.findByEmail(email);
+    public UsuarioExibicaoDto buscarPorId(Long id){
+        Optional<Usuario> usuarioOptional =
+                usuarioRepository.findById(id);
 
-
-        if (usuario.isEnabled()) {
-            return new UsuarioExibicaoDto((Usuario) usuario);
+        if (usuarioOptional.isPresent()){
+            return new UsuarioExibicaoDto(usuarioOptional.get());
         } else {
-            throw new RuntimeException("Usuário não encontrado");
+            throw new RuntimeException("Usuário não existe no banco de dados!");
+        }
+    }
+
+    public List<UsuarioExibicaoDto> listarTodos(){
+        return usuarioRepository
+                .findAll()
+                .stream()
+                .map(UsuarioExibicaoDto::new)
+                .toList();
+    }
+
+    public void excluir(Long id){
+        Optional<Usuario> usuarioOptional =
+                usuarioRepository.findById(id);
+
+        if (usuarioOptional.isPresent()){
+            usuarioRepository.delete(usuarioOptional.get());
+        } else {
+            throw new RuntimeException("Usuário não encontrado!");
+        }
+    }
+
+    public Usuario atualizar(Usuario usuario){
+        Optional<Usuario> usuarioOptional =
+                usuarioRepository.findById(usuario.getId());
+
+        if (usuarioOptional.isPresent()){
+            return usuarioRepository.save(usuario);
+        } else {
+            throw new RuntimeException("Usuário não encontrado!");
         }
     }
 

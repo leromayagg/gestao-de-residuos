@@ -42,6 +42,8 @@ public class AuthController {
 
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
+        System.out.println(auth.getPrincipal());
+
         String token = tokenService.gerarToken((Usuario) auth.getPrincipal());
 
         return ResponseEntity.ok(new TokenDto(token));
@@ -49,13 +51,12 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity register(@RequestBody @Valid UsuarioRegistroDto usuarioRegistroDto){
+    public UsuarioExibicaoDto registrar(@RequestBody @Valid UsuarioRegistroDto usuarioRegistroDto){
 
-        UsuarioExibicaoDto usuarioExibicaoDto = null;
+        UsuarioExibicaoDto usuarioSalvo = null;
+        usuarioSalvo = usuarioService.criarUsuario(usuarioRegistroDto);
 
-        usuarioExibicaoDto = usuarioService.criarUsuario(usuarioRegistroDto);
-
-        return ResponseEntity.ok(usuarioExibicaoDto);
+        return usuarioSalvo;
 
     }
 

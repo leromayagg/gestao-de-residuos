@@ -32,8 +32,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/user/confirm-scheduling/*")
-                        .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/endereco").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/endereco/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/endereco").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/endereco").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
                 .addFilterBefore(
                         verificarToken,
